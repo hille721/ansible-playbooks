@@ -1,0 +1,10 @@
+- name: Install RHEL/Fedora Web Console (Cockpit)
+  include_role:
+      name: linux-system-roles.cockpit
+
+- name: Configure Firewall for Web Console
+  include_role:
+    name: linux-system-roles.firewall
+  vars:
+    service: cockpit
+    state: enabled

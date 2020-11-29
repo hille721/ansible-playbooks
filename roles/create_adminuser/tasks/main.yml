@@ -1,0 +1,37 @@
+- name: Check if login as {{ adminuser }} already possible
+  command: visudo -cf /etc/sudoers
+  become: yes
+  register: adminuserlogin
+  ignore_unreachable: yes
+
+- block:
+  - name: Make sure we have a 'wheel' group
+    group:
+      name: wheel
+      state: present
+
+  - name: Allow 'wheel' group to have passwordless sudo
+    lineinfile:
+      dest: /etc/sudoers
+      state: present
+      regexp: '^%wheel'
+      line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+      validate: 'visudo -cf %s'
+
+  - name: Add sudoers users {{ adminuser }} to wheel group
+    user:
+      name: "{{ adminuser }}"
+      password: "{{ password | password_hash('sha512') }}"
+      groups: wheel
+      append: yes
+      state: present
+      createhome: yes
+      update_password: on_create
+
+  - name: Set authorized key taken from file
+    authorized_key:
+      user: "{{ adminuser }}"
+      state: present
+      key: "{{ lookup('file', '{{ adminuser_ssh_pub }}') }}"
+  remote_user: root
+  when: adminuserlogin.changed == false

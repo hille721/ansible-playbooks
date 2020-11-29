@@ -1,0 +1,68 @@
+---
+- name: Post installation tasks for a Fedora Raspberry Pi 4 installation (https://medium.com/ironhaul/installing-64-bit-fedora-on-the-raspberry-pi-4-d4a665ea65d3)
+  hosts: all
+  vars:
+    adminuser: hille
+    adminuser_ssh_pub: "/home/hille/.ssh/id_rsa.pub"
+    password: PASSWORD
+  remote_user: "{{ adminuser }}"
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - name: Add Admin User
+      include_role:
+        name: create_adminuser
+
+    - name: Gathering facts
+      setup:
+
+    - name: Disable root login and ssh hardening
+      include_role:
+        name: vitalk.secure-ssh
+      vars:
+        ssh_identity_key: "{{ adminuser_ssh_pub }}"
+        ssh_user: "{{ adminuser }}"
+        sshd: sshd
+
+    - name: one more restart of sshd
+      service:
+        name: sshd
+        state: restarted
+
+    - name: Set timezone to UTC
+      community.general.timezone:
+        name: UTC
+
+    - name: Set up Cockpit
+      include_role:
+        name: set_up_cockpit
+      vars:
+        cockpit_packages:
+          - cockpit
+          - cockpit-networkmanager
+          - cockpit-packagekit
+          - cockpit-selinux
+          - cockpit-storaged
+          - cockpit-podman
+          - cockpit-machines
+
+    - name: Add additonal repositories (RPM Fusion, RPM Shpere)
+      include_role:
+        name: additonal_repos_fedora
+
+    - name: Install additonal packages
+      dnf:
+        name:
+          - htop
+          - dnf-automatic
+          - libraspberrypi
+        state: present
+
+    - name: Running DNF update
+      dnf:
+        name: "*"
+        state: latest
+
+    - name: Reboot
+      reboot:

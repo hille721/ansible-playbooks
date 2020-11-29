@@ -1,0 +1,9 @@
+# manage firewall
+- src: linux-system-roles.firewall
+
+# manage cockpit
+- src: linux-system-roles.cockpit
+
+# ssh hardening (the older version from galaxy does not work anymore)
+- src: git+https://github.com/vitalk/ansible-secure-ssh.git
+  name: vitalk.secure-ssh
