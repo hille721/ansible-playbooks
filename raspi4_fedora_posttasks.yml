@@ -57,6 +57,7 @@
           - htop
           - dnf-automatic
           - libraspberrypi
+          - qemu-system-arm
         state: present
 
     - name: Running DNF update
