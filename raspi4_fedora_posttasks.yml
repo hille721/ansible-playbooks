@@ -40,6 +40,7 @@
       vars:
         cockpit_packages:
           - cockpit
+          - cockpit-pcp
           - cockpit-networkmanager
           - cockpit-packagekit
           - cockpit-selinux
@@ -57,7 +58,6 @@
           - htop
           - dnf-automatic
           - libraspberrypi
-          - qemu-system-arm
         state: present
 
     - name: Running DNF update
