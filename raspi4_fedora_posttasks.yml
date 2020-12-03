@@ -58,6 +58,7 @@
           - htop
           - dnf-automatic
           - libraspberrypi
+          - binutils
         state: present
 
     - name: Running DNF update
