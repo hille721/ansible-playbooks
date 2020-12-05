@@ -59,6 +59,7 @@
           - dnf-automatic
           - libraspberrypi
           - binutils
+          - git
         state: present
 
     - name: Running DNF update
