@@ -14,7 +14,7 @@ Requirements
 ============
 
 * `Vagrant <https://www.vagrantup.com/>`_
-*  provisioner for Vagrant (I used **libvirt** in this example, but could be simply changed
+*  provisioner for Vagrant (I used **libvirt** in this example, but this can be simple changed in the ``Vagrantfile``)
 
 
 Project structure
