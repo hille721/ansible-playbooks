@@ -1,0 +1,48 @@
+---
+- name: install Foreman/ Katello with Ansible plugin
+  hosts: all
+  become: true
+
+  tasks:
+    - name: install yum repositories
+      yum:
+        name:
+          - "https://yum.theforeman.org/releases/2.3/el7/x86_64/foreman-release.rpm"
+          - "https://fedorapeople.org/groups/katello/releases/yum/3.18/katello/el7/x86_64/katello-repos-latest.rpm"
+          - "https://yum.puppet.com/puppet6-release-el-7.noarch.rpm"
+          - epel-release
+          - centos-release-scl-rh
+        state: present
+
+    - name: install katello package
+      package:
+        name: katello
+        state: present
+
+    - name: install Foreman/Katello with Ansible Plugin
+      command:
+        cmd: foreman-installer --no-colors --scenario katello --enable-foreman-plugin-ansible --enable-foreman-proxy-plugin-ansible --enable-foreman-plugin-remote-execution --enable-foreman-proxy-plugin-remote-execution-ssh
+      register: install_out
+
+    - name: permit traffic in default zone for https service
+      firewalld:
+        service: https
+        permanent: yes
+        state: enabled
+
+    - name: open port 443 
+      firewalld:
+        port: 443/tcp
+        permanent: yes
+        state: enabled
+
+    - name: Restart service firewalld, in all cases
+      service:
+        name: firewalld
+        state: restarted
+
+    - name: Foreman/Katello successfully installed
+      ansible.builtin.debug:
+        msg: "{{ install_out.stdout_lines }}"
+      when: install_out.rc == 0
+

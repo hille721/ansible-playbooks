@@ -1,0 +1,19 @@
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define "foreman" do |foreman|
+    foreman.vm.box = "generic/centos7"
+    foreman.vm.hostname = "foreman"
+    foreman.vm.provider "libvirt" do |p|
+      p.memory = "12288"
+      p.cpus = "2"
+    end
+    foreman.vm.provision "ansible" do |ansible|
+      ansible.playbook = "play_setup.yml"
+    end
+    foreman.vm.provision "ansible" do |ansible|
+      ansible.playbook = "play_install_foreman_katello.yml"
+    end
+  end
+
+end

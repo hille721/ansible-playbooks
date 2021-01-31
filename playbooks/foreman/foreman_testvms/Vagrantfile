@@ -1,0 +1,54 @@
+$script = <<-'SCRIPT'
+
+mkdir /root/.ssh && chmod 700 /root/.ssh
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDM0Ins3oSGx2yewkYpy72qkxZ5dY91DyN74xWSwttbEJyvVQcVbxH9XuPtPo1z8dU5mBdAwS+XW390ZvBPvTKb8WGV/YxWyPZTOeMlknZrPu/v2jbHriSNPCYSHN+XOHOb/rObMNVVk/BIxfkp0HMroyyEMQZlMLcKqpjvsQPqxpXx06d0oIcrPLzV2I7xyhWVYXkyCzRH+38fbT3HuwtVPm2sx3pxhWft8JZBQ6T1IBwFQCnBzrEeuK0E0M4nhfirsLn0HfT2fSDrV0mYECp3o4mTJQ74WpaiXtLb1GhoJcmNVr1p5q3zAVRS9ckBhMI9pxl0E6pt8+I5YUWCCAO7 foreman-proxy@foreman' > /root/.ssh/authorized_keys
+chmod 600 /root/.ssh/authorized_keys
+
+sed -ri 's/^(PermitRootLogin).*/\1 yes/' /etc/ssh/sshd_config
+systemctl restart sshd.service
+SCRIPT
+
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define "debian" do |debian|
+    debian.vm.box = "generic/debian10"
+    debian.vm.hostname = "debian10"
+    debian.vm.provider "libvirt" do |p|
+      p.memory = "1024"
+      p.cpus = "2"
+    end
+    debian.vm.provision :shell, inline: $script, :args => "sudo"
+  end
+
+  config.vm.define "centos" do |centos|
+    centos.vm.box = "generic/centos8"
+    centos.vm.hostname = "centos8"
+    centos.vm.provider "libvirt" do |p|
+      p.memory = "1024"
+      p.cpus = "2"
+    end
+    centos.vm.provision :shell, inline: $script, :args => "su"
+  end
+
+  config.vm.define "suse" do |suse|
+    suse.vm.box = "opensuse/Leap-15.2.x86_64"
+    suse.vm.hostname = "suse15"
+    suse.vm.provider "libvirt" do |p|
+      p.memory = "1024"
+      p.cpus = "2"
+    end
+    suse.vm.provision :shell, inline: $script, :args => "direct"
+  end
+
+  config.vm.define "ubuntu" do |ubuntu|
+    ubuntu.vm.box = "generic/ubuntu2004"
+    ubuntu.vm.hostname = "ubuntu20"
+    ubuntu.vm.provider "libvirt" do |p|
+      p.memory = "1024"
+      p.cpus = "2"
+    end
+    ubuntu.vm.provision :shell, inline: $script, :args => "sudo-nopasswd"
+  end
+
+end
