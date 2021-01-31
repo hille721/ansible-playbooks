@@ -1,3 +1,9 @@
+About this repository
+=====================
+
+* different cases where I automated my work with Ansible
+
+
 Installation
 ============
 
