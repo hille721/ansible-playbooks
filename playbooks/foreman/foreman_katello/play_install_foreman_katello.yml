@@ -7,8 +7,8 @@
     - name: install yum repositories
       yum:
         name:
-          - "https://yum.theforeman.org/releases/2.3/el7/x86_64/foreman-release.rpm"
-          - "https://fedorapeople.org/groups/katello/releases/yum/3.18/katello/el7/x86_64/katello-repos-latest.rpm"
+          - "https://yum.theforeman.org/releases/nightly/el7/x86_64/foreman-release.rpm"
+          - "https://fedorapeople.org/groups/katello/releases/yum/nightly/katello/el7/x86_64/katello-repos-latest.rpm"
           - "https://yum.puppet.com/puppet6-release-el-7.noarch.rpm"
           - epel-release
           - centos-release-scl-rh

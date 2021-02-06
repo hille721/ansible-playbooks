@@ -1,10 +1,16 @@
 ---
 - name: Post installation tasks for a Fedora Raspberry Pi 4 installation (https://medium.com/ironhaul/installing-64-bit-fedora-on-the-raspberry-pi-4-d4a665ea65d3)
   hosts: all
+  vars_prompt:
+    - name: adminuser
+      prompt: What should be the username of the admin?
+      private: no
+
+    - name: password
+      prompt: What should be the password?
+
   vars:
-    adminuser: hille
-    adminuser_ssh_pub: "/home/hille/.ssh/id_rsa.pub"
-    password: PASSWORD
+    adminuser_ssh_pub: "/home/{{ adminuser }}/.ssh/id_rsa.pub"
   remote_user: "{{ adminuser }}"
   become: yes
   gather_facts: no

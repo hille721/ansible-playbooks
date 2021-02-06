@@ -3,6 +3,7 @@ About
 
 * create a VM with `Foreman <https://www.theforeman.org/>`_/ `Katello <https://theforeman.org/plugins/katello/>`_ for testing purposes installed on your client
 * only one command necessary for provisioning:
+* the nightly build will be installed
 
     .. code-block::
 
@@ -14,7 +15,8 @@ Requirements
 ============
 
 * `Vagrant <https://www.vagrantup.com/>`_
-*  provisioner for Vagrant (I used **libvirt** in this example, but this can be simple changed in the ``Vagrantfile``)
+* as provisioner for Vagrant **libvirt** is used 
+(could be changed in the ``Vagrantfile``)
 
 
 Project structure

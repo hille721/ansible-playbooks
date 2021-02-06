@@ -13,3 +13,5 @@ __pycache__/
 *~
 .pytest_cache/
 .vagrant/
+roles/linux-system-roles*
+roles/vitalk*
